@@ -1,0 +1,20 @@
+{
+  "env": {
+    "jest": true
+  },
+  "globals": {
+    "React": true,
+    "prepareComponentTest": true,
+    "MockChildren": true
+  },
+  "rules": {
+    "import/no-unresolved": 0,
+    "import/extensions": 0,
+    "import/no-extraneous-dependencies": 0,
+    "import/no-commonjs": 0,
+    "import/no-dynamic-require": 0,
+    "no-throw-literal": 0,
+    "global-require": 0,
+    "react/jsx-props-no-spreading": 0
+  }
+}
