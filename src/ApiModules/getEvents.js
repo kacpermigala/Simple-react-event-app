@@ -10,7 +10,7 @@ export default function getEvents(params = {}) {
   });
 
   return fetch(url.toString(), {
-    method: 'get',
+    method: 'GET',
   })
     .then(res => res.json())
     .then(res => res.data);

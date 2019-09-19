@@ -14,6 +14,7 @@ a {
   @extend .box-additional;
   padding: 25px;
   margin: 50px 0;
+  display: flex;
 }
 
 #pagination {
@@ -53,5 +54,10 @@ a {
     display: flex;
     justify-content: center;
   }
+}
 
+.button-wrapper {
+  flex: 1;
+  align-self: flex-end;
+  margin-bottom: 8px;
 }

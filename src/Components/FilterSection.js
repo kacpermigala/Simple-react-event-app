@@ -4,13 +4,9 @@ import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import InputLabel from '@material-ui/core/InputLabel';
 import { makeStyles } from '@material-ui/core/styles';
-import TextField from '@material-ui/core/TextField';
-import {
-  MuiPickersUtilsProvider,
-  KeyboardTimePicker,
-  KeyboardDatePicker,
-} from '@material-ui/pickers';
-import DateFnsUtils from '@date-io/date-fns';
+import Button from '@material-ui/core/Button';
+import eventMethodConst from '../utils/eventMethodConst';
+import Inputs from './Inputs';
 
 const useStyles = makeStyles(theme => ({
   formControl: {
@@ -19,6 +15,10 @@ const useStyles = makeStyles(theme => ({
   },
   picker: {
     margin: 8,
+  },
+  createButton: {
+    float: 'right',
+    backgroundColor: '#5272FF',
   },
 }));
 
@@ -29,54 +29,43 @@ const FilterSection = ({
   setLocation,
   orderBy,
   setOrderBy,
+  handleActionOpen,
 }) => {
   const classes = useStyles();
 
   return (
     <div id="filter-section">
-      <MuiPickersUtilsProvider utils={DateFnsUtils}>
-        <TextField
-          className={classes.formControl}
-          id="standard-location"
-          label="Location"
-          value={location}
+      <Inputs
+        location={location}
+        date={date}
+        setLocation={setLocation}
+        setDate={setDate}
+      />
+      <FormControl className={classes.formControl}>
+        <InputLabel htmlFor="sorting">Sort</InputLabel>
+        <Select
+          id="standard-order"
+          value={orderBy}
           onChange={ev => {
-            setLocation(ev.target.value);
+            setOrderBy(ev.target.value);
           }}
-          margin="normal"
-        />
-        <KeyboardDatePicker
-          className={classes.picker}
-          disableToolbar
-          variant="inline"
-          format="yyyy-MM-dd"
-          autoOk={true}
-          margin="normal"
-          id="date-picker-inline"
-          label="Date picker inline"
-          value={date}
-          onChange={change => {
-            setDate(change);
+        >
+          <MenuItem value={'location'}>Location</MenuItem>
+          <MenuItem value={'date'}>Date</MenuItem>
+        </Select>
+      </FormControl>
+      <div className="button-wrapper">
+        <Button
+          onClick={() => {
+            handleActionOpen(eventMethodConst.CREATE);
           }}
-          KeyboardButtonProps={{
-            'aria-label': 'change date',
-          }}
-        />
-
-        <FormControl className={classes.formControl}>
-          <InputLabel htmlFor="sorting">Sort</InputLabel>
-          <Select
-            id="standard-order"
-            value={orderBy}
-            onChange={ev => {
-              setOrderBy(ev.target.value);
-            }}
-          >
-            <MenuItem value={'location'}>Location</MenuItem>
-            <MenuItem value={'date'}>Date</MenuItem>
-          </Select>
-        </FormControl>
-      </MuiPickersUtilsProvider>
+          variant="contained"
+          color="primary"
+          className={classes.createButton}
+        >
+          Create event
+        </Button>
+      </div>
     </div>
   );
 };
