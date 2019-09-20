@@ -47,12 +47,6 @@ const EventsList = () => {
       getEvents(params)
         .then(result => {
           setEvents(result);
-          result.forEach(event => {
-            // sprawdz czy forecast dla danej lokacji jest juz w tablicy weather jesli tak odpusc mordo
-            if (new Date(event.date).getTime() < fortnightAway) {
-              getWeather(location).then(xxx => {});
-            }
-          });
           setLoading(false);
         })
         .catch(() => {
@@ -89,11 +83,44 @@ const EventsList = () => {
     });
   };
 
-  const checkLocation = location => {};
-
   useEffect(() => {
     grabThrottled();
   }, [limit, date, location, orderBy]);
+
+  useEffect(() => {
+    const promises = [];
+    events.forEach(event => {
+      if (
+        new Date(event.date).getTime() < fortnightAway &&
+        event.location &&
+        !weather[event.location] &&
+        new Date(event.date) > new Date()
+      ) {
+        promises.push(getWeather(event.location.toUpperCase()));
+      }
+    });
+    Promise.all(promises)
+      .then(values => {
+        const weatherToUpdate = {};
+        values.forEach(data => {
+          data.data.forEach(el => {
+            weatherToUpdate[data.city_name.toUpperCase()] = {
+              max: el.app_max_temp,
+              min: el.app_min_temp,
+              city: data.city_name,
+              countryCode: data.country_code,
+            };
+          });
+        });
+        setWeather({
+          ...weather,
+          ...weatherToUpdate,
+        });
+      })
+      .catch(() => {
+        errorContext.informAboutError();
+      });
+  }, [events]);
 
   return (
     <>
@@ -127,6 +154,7 @@ const EventsList = () => {
                       event={event}
                       informAboutChange={grabThrottled}
                       setEventToEdit={setEventToEdit}
+                      weather={weather[event.location.toUpperCase()]}
                     />
                   </Grid>
                 ))}

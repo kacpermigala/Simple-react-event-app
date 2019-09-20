@@ -14,14 +14,14 @@ import ErrorBoundaryContext from './ErrorBoundary/ErrorBoundaryContext';
 
 const useStyles = makeStyles({
   card: {
-    height: 250,
+    height: 200,
   },
   avatar: {
     backgroundColor: '#5272FF',
   },
 });
 
-const EventRecord = ({ event, informAboutChange, setEventToEdit }) => {
+const EventRecord = ({ event, informAboutChange, setEventToEdit, weather }) => {
   const classes = useStyles();
   const errorContext = useContext(ErrorBoundaryContext);
 
@@ -47,11 +47,21 @@ const EventRecord = ({ event, informAboutChange, setEventToEdit }) => {
       />
       <CardContent>
         <Typography variant="body2" color="textSecondary" component="p">
-          //Dodaj prognoze albo napisz ze ni ch bo nie jest 14 dni przed
-          weahter[id] = albo pogoda albo nie ma bo 14 dni dalej od pogody This
-          impressive paella is a perfect party dish and a fun meal to cook
-          together with your guests. Add 1 cup of frozen peas along with the
-          mussels, if you like.
+          {!weather ? (
+            <span>
+              No weather forecast available for that date. Event has been
+              already hosted or is more than 14 days in the future.
+            </span>
+          ) : (
+            <>
+              <span>
+                Weather for {weather.city} / {weather.countryCode} on the day of
+                the event:
+              </span>
+              <span> Max: {weather.max} °C </span>
+              <span>Min: {weather.min} °C </span>
+            </>
+          )}
         </Typography>
       </CardContent>
       <CardActions disableSpacing>
